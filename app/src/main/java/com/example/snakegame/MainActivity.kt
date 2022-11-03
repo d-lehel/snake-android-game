@@ -1,5 +1,7 @@
 package com.example.snakegame
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.GestureDetector
@@ -7,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,10 +17,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         supportActionBar?.hide()
 
         ///////////////////////////////////////////////////////////////////////////////////////
-        // touch controll
+        // touch control
 
         open class OnSwipeTouchListener : View.OnTouchListener {
 
@@ -46,8 +50,8 @@ class MainActivity : AppCompatActivity() {
                     try {
                         val diffY = e2.y - e1.y
                         val diffX = e2.x - e1.x
-                        if (Math.abs(diffX) > Math.abs(diffY)) {
-                            if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (abs(diffX) > abs(diffY)) {
+                            if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                                 if (diffX > 0) {
                                     onSwipeRight()
                                 } else {
@@ -56,13 +60,12 @@ class MainActivity : AppCompatActivity() {
                             }
                         } else {
                             // this is either a bottom or top swipe.
-                            if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                                 if (diffY > 0) {
                                     onSwipeTop()
                                 } else {
                                     onSwipeBottom()
                                 }
-                                true
                             }
                         }
                     } catch (exception: Exception) {
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            @SuppressLint("ClickableViewAccessibility")
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 return gestureDetector.onTouchEvent(event)
             }
@@ -84,24 +88,24 @@ class MainActivity : AppCompatActivity() {
 
         canvas.setOnTouchListener(object : OnSwipeTouchListener() {
             override fun onSwipeLeft() {
-                Snake.alive = true;
+                Snake.alive = true
                 if (Snake.direction != "right")
                     Snake.direction = "left"
             }
 
             override fun onSwipeRight() {
-                Snake.alive = true;
+                Snake.alive = true
                 if (Snake.direction != "left")
                     Snake.direction = "right"
             }
 
             override fun onSwipeTop() {
-                Snake.alive = true;
+                Snake.alive = true
                 if (Snake.direction != "up")
                     Snake.direction = "down"
             }
             override fun onSwipeBottom() {
-                Snake.alive = true;
+                Snake.alive = true
                 if (Snake.direction != "down")
                     Snake.direction = "up"
             }
@@ -117,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                             // create new head position
                             Snake.headY -= 50
                             if (!Snake.possibleMove()) {
-                                Snake.alive = false;
+                                Snake.alive = false
                                 Snake.reset()
                             }
                         }
@@ -125,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                             // create new head position
                             Snake.headY += 50
                             if (!Snake.possibleMove()) {
-                                Snake.alive = false;
+                                Snake.alive = false
                                 Snake.reset()
                             }
                         }
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                             // create new head position
                             Snake.headX -= 50
                             if (!Snake.possibleMove()) {
-                                Snake.alive = false;
+                                Snake.alive = false
                                 Snake.reset()
                             }
 
@@ -142,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                             // create new head position
                             Snake.headX += 50
                             if (!Snake.possibleMove()) {
-                                Snake.alive = false;
+                                Snake.alive = false
                                 Snake.reset()
                             }
                         }
@@ -164,22 +168,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_up.setOnClickListener {
-            Snake.alive = true;
+            Snake.alive = true
             if (Snake.direction != "down")
                 Snake.direction = "up"
         }
         button_down.setOnClickListener {
-            Snake.alive = true;
+            Snake.alive = true
             if (Snake.direction != "up")
                 Snake.direction = "down"
         }
         button_left.setOnClickListener {
-            Snake.alive = true;
+            Snake.alive = true
             if (Snake.direction != "right")
                 Snake.direction = "left"
         }
         button_right.setOnClickListener {
-            Snake.alive = true;
+            Snake.alive = true
             if (Snake.direction != "left")
                 Snake.direction = "right"
         }
